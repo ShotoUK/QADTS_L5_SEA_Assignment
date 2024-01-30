@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, abort, render_template
 
+
 app = Flask(__name__)
 
 @app.route('/')
