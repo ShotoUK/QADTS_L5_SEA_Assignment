@@ -1,0 +1,17 @@
+<!-- FILEPATH: /c:/Users/icema/OneDrive/Documents/Python Projects/DTSL5_SEA_Project/QADTS_L5_SEA_Assignment/templates/login.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST" action="/login">
+        {{ form.hidden_tag() }}
+        {{ form.email.label }} {{ form.email }}
+        {{ form.password.label }} {{ form.password }}
+        {{ form.submit }}
+    </form>
+</body>
+</html>

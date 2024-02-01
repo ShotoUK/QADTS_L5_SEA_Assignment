@@ -37,6 +37,12 @@ Tigersolv Sales CRM
         </tbody>
     </table>
 
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name.label }} {{ form.name(id='name-form') }}
+        {{ form.submit() }}
+    </form>
+
 </div>
 
 {% endblock body %}
