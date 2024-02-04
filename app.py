@@ -1,11 +1,10 @@
 import os
-from werkzeug import security
 from flask import Flask, request, redirect, abort, render_template
 from flask_bootstrap import Bootstrap
-from forms import NameForm, LoginForm
+from app.main.forms import NameForm, LoginForm
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -41,18 +40,37 @@ def login():
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
+                formEmail = form.email.data
+                formPassword = form.password.data
+                dbUser = User.query.filter_by(Email=formEmail).first()
+                if dbUser.Email == formEmail and check_password_hash(dbUser.Password,formPassword) == True:
+                    return '<h1>This is a valid user!</h1>'
+                else:
+                    return '<h1>This is not a valid user!<h1>'
+
+        except:
+            return '<h1>This is not a registered user! <br> Please contact an administrator<h1>'
+    else:
+        return render_template('login.html',form=form)
+    
+@app.route('/user/create', methods=['GET','POST'])
+def create_user():
+    form = LoginForm()
+    if request.method == 'POST':
+        try:
+            if form.validate_on_submit():
                 email = form.email.data
                 password = form.password.data
                 hashed_password = str(generate_password_hash(password, method='scrypt', salt_length=8))
-                loginUser = User(Email=email, Password=hashed_password)
+                newUser = User(Email=email, Password=hashed_password)
 
-                db.session.add(loginUser)
+                db.session.add(newUser)
                 db.session.commit()
             return redirect('/')
         except:
             return 'There was an issue saving to database'
     else:
-        return render_template('login.html',form=form)
+        return render_template('create_user.html',form=form)
 
 @app.errorhandler(404)
 def page_not_found(e):
