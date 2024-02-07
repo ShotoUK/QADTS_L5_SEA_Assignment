@@ -2,7 +2,7 @@ from flask import Flask, request, redirect, abort, render_template
 from app.main.forms import NameForm, LoginForm
 from .. import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import User
+from app.models import User
 from . import main
 
 @main.route('/', methods=['GET','POST'])
