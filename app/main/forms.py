@@ -10,3 +10,8 @@ class LoginForm(FlaskForm):
 class NameForm(FlaskForm):
     name = StringField('What is your name?',validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class CreateUserForm(FlaskForm):
+    email = StringField('Email',validators=[DataRequired()])
+    password = PasswordField('Password',validators=[DataRequired()])
+    submit = SubmitField('Submit')
