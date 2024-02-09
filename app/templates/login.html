@@ -10,12 +10,15 @@
 {% block content %}
 <body>
     <h1>Login</h1>
-    <form method="POST" action="/login">
-        {{ form.hidden_tag() }}
-        {{ form.email.label }} {{ form.email(class='form-control') }}
-        {{ form.password.label }} {{ form.password(class='form-control') }}
-        {{ form.submit(class='btn btn-primary') }}
-    </form>
+    <div>
+        <form method="POST" action="/auth/login">
+            {{ form.hidden_tag() }}
+            {{ form.email.label }} {{ form.email(class='form-control') }}
+            {{ form.password.label }} {{ form.password(class='form-control') }}
+
+            {{ form.submit(class='btn btn-primary') }}
+        </form>
+    </div>
 </body>
 {% endblock %}
 </html>
