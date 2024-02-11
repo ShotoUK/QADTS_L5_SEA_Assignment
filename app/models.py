@@ -34,6 +34,12 @@ class User(UserMixin, db.Model):
     agent = db.relationship('Customer',backref='user',lazy='dynamic')
     note = db.relationship('Note',backref='user',lazy='dynamic')
 
+    def is_authenticated(self):
+        return True
+    
+    def get_id(self):
+        return str(self.UserId)
+
     def __repr__(self):
         return '<User {}>'.format(self.name)
     
