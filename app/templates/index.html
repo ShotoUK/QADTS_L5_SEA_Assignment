@@ -5,45 +5,53 @@
 Tigersolv Sales CRM
 
 {% endblock title %}
-{% block body %}
-<div class="container">
 
-    <div>
-        <h1>Customers</h1>
+{% if current_user.is_authenticated %}
+
+    {% block body %}
+    <div class="container">
+
+        <div>
+            <h1>Customers</h1>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Company</th>
+                <th scope="col">Status</th>
+                <th scope="col">ProductId</th>
+                <th scope="col">AgentId</th>
+                <th scope="col">DateCreated</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr onclick="window.location='/customer/{{customer.CustomerId}}';" >
+                    <td>{{ customer.Name }}</td>
+                    <td>{{ customer.Status }}</td>
+                    <td>{{ customer.ProductId }}</td>
+                    <td>{{ customer.AgentId }}</td>
+                    <td>{{ customer.DateCreated }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-        </tr>
-        </tbody>
-    </table>
 
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.name.label }} {{ form.name(id='name-form') }}
-        {{ form.submit() }}
-    </form>
 
-</div>
+    {% endblock body %}
 
-{% endblock body %}
+{% else %}
+
+<h1> Not a valid user! </h1>
+
+{% endif %}
+
+<script>
+    function navigateTo(url) {
+        window.location.href = url;
+    }
+</script>

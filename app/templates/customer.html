@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block head %}
+
+    {% block title %} Customer Detail {% endblock title %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/customer.css') }}">
+{% endblock head %}
+
+{% block body %}
+<div class="container">
+
+    <h1>Customer Detail</h1>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Customer ID</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.CustomerId }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3 align-items-center">
+            <p class="fs-3">Customer Name</p>
+        </div>
+        <div class="col align-items-center">
+            <p class="fs-4">{{ customer.Name }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Customer Status</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.Status }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Date Created</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.DateCreated }}</p>
+        </div>  
+    </div>
+
+
+</div>
+{% endblock body %}
+
+<!-- <div class="col">
+    <h1>Customer ID</h1>
+    <h1>Customer Name</h1>
+    <h1>Customer Status</h1>
+    <h1>Date Created</h1>
+</div>
+
+<div class="col">
+    <p>{{ customer.CustomerId }}</p>
+    <p>{{ customer.Name }}</p>
+    <p>{{ customer.Status }}</p>
+    <p>{{ customer.DateCreated }}</p>
+</div> -->
