@@ -1,10 +1,10 @@
 .row {
-  margin-block: 20px;
+  margin-block: -30px;
 }
 
 h1 {
   text-align: center;
-  margin-block: 20px;
+  margin-block: 60px;
 }
 
 p {

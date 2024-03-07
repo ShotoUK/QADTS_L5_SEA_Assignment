@@ -7,13 +7,15 @@
 </head>
 {% block content %}
 <body>
-    <h1>Create User</h1>
-    <form method="POST" action="/user/create">
-        {{ form.hidden_tag() }}
-        {{ form.email.label }} {{ form.email(class='form-control') }}
-        {{ form.password.label }} {{ form.password(class='form-control') }}
-        {{ form.submit(class='btn btn-primary') }}
-    </form>
+    <div class="container">
+        <h1>Create User</h1>
+        <form method="POST" action="/user/create">
+            {{ form.hidden_tag() }}
+            {{ form.email.label }} {{ form.email(class='form-control') }}
+            {{ form.password.label }} {{ form.password(class='form-control') }}
+            {{ form.submit(class='btn btn-primary') }}
+        </form>
+    </div>
 </body>
 {% endblock %}
 </html>

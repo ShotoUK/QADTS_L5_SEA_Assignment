@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <title>Create Role</title>
+
+{% endblock head %}
+
+{% block body %}
+
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-4">Create Role</h1>
+        <form method="POST" action="/security/roles/create">
+            {{ form.hidden_tag() }}
+            {{ form.name.label }} {{ form.name(class='form-control mb-4') }}
+            {{ form.permissions.label }} {{ form.permissions(class="form-select mb-4") }}
+            {{ form.submit(class='btn btn-primary') }}
+        </form>
+    </div>
+</body>
+
+{% endblock body %}

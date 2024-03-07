@@ -27,12 +27,20 @@ Tigersolv Sales CRM
             </thead>
             <tbody>
                 {% for customer in customers %}
-                <tr onclick="window.location='/customer/{{customer.CustomerId}}';" >
+                <!-- <tr onclick="window.location='/customer/{{customer.CustomerId}}';" > -->
+                    <tr></tr>
                     <td>{{ customer.Name }}</td>
-                    <td>{{ customer.Status }}</td>
+                    <td>
+
+                          {{ customer.Status }}
+                    </td>
                     <td>{{ customer.ProductId }}</td>
                     <td>{{ customer.AgentId }}</td>
                     <td>{{ customer.DateCreated }}</td>
+                    <td>
+                        <a class="btn btn-outline-dark" href="/customer/{{customer.CustomerId}}">Detail</a>
+                        <a class="btn btn-warning" href="/customer/edit/{{customer.CustomerId}}">Edit</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

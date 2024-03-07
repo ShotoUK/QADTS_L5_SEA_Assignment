@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
 
-    {% block title %} Customer Detail {% endblock title %}
+    <title> Customer Detail </title> 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/customer.css') }}">
 {% endblock head %}
 
@@ -12,7 +12,17 @@
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Customer ID</p>
+
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a class="btn btn-outline-dark mb-3" href="/customer/edit/{{customer.CustomerId}}" role="button">Edit</a>
+            <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Customer ID:</p>
         </div>
         <div class="col">
             <p class="fs-4">{{ customer.CustomerId }}</p>
@@ -21,7 +31,7 @@
 
     <div class="row">
         <div class="col-3 align-items-center">
-            <p class="fs-3">Customer Name</p>
+            <p class="fs-3">Customer Name:</p>
         </div>
         <div class="col align-items-center">
             <p class="fs-4">{{ customer.Name }}</p>
@@ -30,7 +40,16 @@
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Customer Status</p>
+            <p class="fs-3">Product:</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.ProductId }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Customer Status:</p>
         </div>
         <div class="col">
             <p class="fs-4">{{ customer.Status }}</p>
@@ -39,27 +58,83 @@
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Date Created</p>
+            <p class="fs-3">Date Created:</p>
         </div>
         <div class="col">
             <p class="fs-4">{{ customer.DateCreated }}</p>
         </div>  
     </div>
 
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Description:</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.Description }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Contact Name:</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.ContactName }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Contact Email:</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.ContactEmail }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Contact Phone:</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.ContactPhone }}</p>
+        </div>  
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p class="fs-3">Notes:</p>
+        </div>
+        <div class="col">
+            <p class="fs-4">{{ customer.notes }}</p>
+        </div>  
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this customer?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" href="/customer/delete/{{customer.CustomerId}}" role="button">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 {% endblock body %}
 
-<!-- <div class="col">
-    <h1>Customer ID</h1>
-    <h1>Customer Name</h1>
-    <h1>Customer Status</h1>
-    <h1>Date Created</h1>
-</div>
+{% block modal %}
+    
 
-<div class="col">
-    <p>{{ customer.CustomerId }}</p>
-    <p>{{ customer.Name }}</p>
-    <p>{{ customer.Status }}</p>
-    <p>{{ customer.DateCreated }}</p>
-</div> -->
+
+
+{% endblock %}
