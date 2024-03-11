@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, SelectField, SelectMultipleField
+from wtforms import StringField, SubmitField, PasswordField, SelectField, SelectMultipleField, TextAreaField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -30,4 +30,8 @@ class CreateCustomerForm(FlaskForm):
 class CreateRoleForm(FlaskForm):
     name = StringField('Name')
     permissions = SelectMultipleField('Permissions', choices=[('1','View'),('2','Edit'),('4','Admin')])
+    submit = SubmitField('Submit')
+
+class CreateNoteForm(FlaskForm):
+    note = TextAreaField('Note')
     submit = SubmitField('Submit')

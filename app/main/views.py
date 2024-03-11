@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, abort, render_template
 from flask_login import login_required,current_user
 from app.main.forms import NameForm, LoginForm, CreateUserForm, CreateCustomerForm \
-    , CreateRoleForm
+    , CreateRoleForm, CreateNoteForm
 from .. import db
 from app.models import User, Customer, Permission, Role, Note
 from . import main
@@ -20,8 +20,22 @@ def index():
 @login_required
 @permission_required(Permission.VIEW)
 def customerdetail(id):
-    customer = db.session.query(Customer).select_from(Note).filter_by(CustomerId=id).join(Customer, Customer.CustomerId == Note.CustomerId).first()
-    return render_template('customer.html', customer=customer, current_user=current_user)
+    form = CreateNoteForm()
+    if request.method == 'POST':
+        try:
+            if form.validate_on_submit():
+                newNote = Note()
+                newNote.CustomerId = id
+                newNote.Note = form.note.data
+                db.session.add(newNote)
+                db.session.commit()
+
+                return redirect('/customer/{}'.format(id))
+        except:
+            return 'There was an issue saving note to database'
+        
+    customer = db.session.query(Customer, Note).filter_by(CustomerId=id).outerjoin(Note, Customer.CustomerId == Note.CustomerId).order_by(Note.DateCreated.desc()).all()
+    return render_template('customer.html', customer=customer, current_user=current_user, form=form)
   
 @main.route('/user/create', methods=['GET','POST'])
 @login_required

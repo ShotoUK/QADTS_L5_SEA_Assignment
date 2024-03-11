@@ -22,93 +22,92 @@
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Customer ID:</p>
+            <p class="fs-5">Customer ID:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.CustomerId }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].CustomerId }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3 align-items-center">
-            <p class="fs-3">Customer Name:</p>
+            <p class="fs-5">Customer Name:</p>
         </div>
-        <div class="col align-items-center">
-            <p class="fs-4">{{ customer.Name }}</p>
+        <div class="col-5 align-items-center">
+            <p class="fs-5">{{ customer[0][0].Name }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Product:</p>
+            <p class="fs-5">Product:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.ProductId }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].ProductId }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Customer Status:</p>
+            <p class="fs-5">Customer Status:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.Status }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].Status }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Date Created:</p>
+            <p class="fs-5">Date Created:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.DateCreated }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].DateCreated }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Description:</p>
+            <p class="fs-5">Description:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.Description }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].Description }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Contact Name:</p>
+            <p class="fs-5">Contact Name:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.ContactName }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].ContactName }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Contact Email:</p>
+            <p class="fs-5">Contact Email:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.ContactEmail }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].ContactEmail }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Contact Phone:</p>
+            <p class="fs-5">Contact Phone:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.ContactPhone }}</p>
+        <div class="col-5">
+            <p class="fs-5">{{ customer[0][0].ContactPhone }}</p>
         </div>  
     </div>
 
     <div class="row">
         <div class="col-3">
-            <p class="fs-3">Notes:</p>
+            <p class="fs-5">Notes:</p>
         </div>
-        <div class="col">
-            <p class="fs-4">{{ customer.notes }}</p>
-        </div>  
     </div>
+
+
 
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -128,6 +127,30 @@
         </div>
     </div>
 
+
+</div>
+
+<div class="container mt-4">
+
+    <div class="row">
+        <form method="POST" action="/customer/{{ customer[0][0].CustomerId }}">
+            {{ form.hidden_tag() }}
+            <div class="form-floating">
+                {{ form.note(class='form-control mb-4', id='noteInput') }}
+                <label for="noteInput">Add Note</label>
+            </div>
+            {{ form.submit(class='btn btn-primary mb-4', value="Add Note") }}
+        </form>
+    </div>
+
+    {% for result in customer %}
+    <div class="card shadow p-3 mb-2 bg-body rounded">
+        <div class="card-body">
+            <p class="align-self-start">Date Created: {{ result[1].DateCreated.strftime('%d/%m/%Y') }}</p> 
+            <p>{{ result[1].Note }}</p>
+        </div>
+    </div>
+    {% endfor %}
 
 </div>
 {% endblock body %}
