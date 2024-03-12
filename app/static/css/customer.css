@@ -10,3 +10,7 @@ h1 {
 p {
   margin-block: 20px;
 }
+
+#noteInput {
+  height: auto;
+}

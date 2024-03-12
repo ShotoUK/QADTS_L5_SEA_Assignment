@@ -127,6 +127,15 @@ def edit_customer(id):
     else:
         return render_template('editcustomer.html', form=form, id=id)
     
+@main.route('/customer/note/delete/<int:id>', methods=['GET'])
+@login_required
+@admin_required
+def delete_note(id):
+    note = Note.query.get_or_404(id)
+    db.session.delete(note)
+    db.session.commit()
+    return redirect('/customer/{}'.format(note.CustomerId))
+    
 @main.route('/customer/delete/<int:id>', methods=['GET','POST'])
 @login_required
 @admin_required
