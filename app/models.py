@@ -85,6 +85,19 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.ADMIN)
     
+    @staticmethod
+    def insert_adminuser():
+        users = {
+            'admin': ['Admin','User','charlton.reid@tigersolv.com','password','7']
+        }
+        for u in users:
+            user = User.query.filter_by(Email=u).first()
+            if user is None:
+                user = User(FirstName=users[u][0],LastName=users[u][1],Email=users[u][2],Password=users[u][3])
+            db.session.add(user)
+        db.session.commit()
+                         
+    
 class AnonymousUser(AnonymousUserMixin):
     def can(self,permissions):
         return False
