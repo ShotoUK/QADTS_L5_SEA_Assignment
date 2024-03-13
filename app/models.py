@@ -119,7 +119,7 @@ class Role(db.Model):
             self.Permissions = 0
 
     def __repr__(self):
-        return '<Role {}>'.format(self.name)
+        return '<Role {}>'.format(self.Name)
     
     def add_permission(self,permission):
         if not self.has_permission(permission):
