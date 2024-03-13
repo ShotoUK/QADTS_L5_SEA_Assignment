@@ -136,7 +136,6 @@ class Product(db.Model):
     Description = db.Column(db.String(2000))
     Price = db.Column(db.Float)
     DateCreated = db.Column(db.DateTime, default=datetime.utcnow)
-    customers = db.relationship('Customer',backref='product',lazy='dynamic')
 
     def __repr__(self):
         return '<Product {}>'.format(self.name)
