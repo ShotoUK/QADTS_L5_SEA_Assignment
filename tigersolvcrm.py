@@ -16,7 +16,7 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
-@app.cli.command
+@app.cli.command()
 def deploy():
     upgrade()
     Role.insert_roles()
