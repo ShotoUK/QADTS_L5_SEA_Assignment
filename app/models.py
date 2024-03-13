@@ -21,6 +21,22 @@ class Customer(db.Model):
     def __repr__(self):
         return '<Customer {}>'.format(self.name)
     
+    @staticmethod
+    def insert_customers():
+        customers = {
+            'Global Systems': [1,'Global company that wants Debtsolv','New Lead','John Doe','john@gsystems.com','01614821953'],
+            'Tech Solutions': [2,'Wants to resell wallkat','New Lead','Lily Chang','lily@techsolutions.com','02081234567'],
+            'Future Industries': [3,'Description 3','Active','Max Davidson','max@futureindustries.com','01619876543'],
+            'Meta Enterprises': [4,'Description 4','Inactive','Rachel Bennett','rachel@menterprises.com','01143698520']
+        }
+
+        for c in customers:
+            customer = Customer.query.filter_by(Name=c).first()
+            if customer is None:
+                customer = Customer(ProductId=customers[c][0],Name=c,Description=customers[c][1],Status=customers[c][2],ContactName=customers[c][3],ContactEmail=customers[c][4],ContactPhone=customers[c][5])
+            db.session.add(customer)
+        db.session.commit()
+    
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
     UserId = db.Column(db.Integer,primary_key=True)
@@ -28,7 +44,7 @@ class User(UserMixin, db.Model):
     LastName = db.Column(db.String(64))
     Email = db.Column(db.String(255))
     Password = db.Column(db.String(255))
-    Role = db.Column(db.Integer)
+    Role = db.Column(db.Integer, default=1)
     DateCreated = db.Column(db.DateTime , default=datetime.utcnow)
 
     agent = db.relationship('Customer',backref='user',lazy='dynamic')

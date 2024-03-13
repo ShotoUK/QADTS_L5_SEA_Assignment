@@ -18,6 +18,7 @@ def test():
 
 @app.cli.command()
 def deploy():
-    upgrade()
+    # upgrade()
     Role.insert_roles()
+    Customer.insert_customers()
 
