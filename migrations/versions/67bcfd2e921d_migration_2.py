@@ -1,7 +1,7 @@
 """Migration 2
 
 Revision ID: 67bcfd2e921d
-Revises: 918e531e9887
+Revises: 
 Create Date: 2024-02-28 15:52:43.450978
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '67bcfd2e921d'
-down_revision = '918e531e9887'
+down_revision = ''
 branch_labels = None
 depends_on = None
 
