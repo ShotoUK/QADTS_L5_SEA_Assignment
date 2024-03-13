@@ -22,8 +22,8 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir,'data.sqlite')
-    if os.environ.get('DATABASE_URL').startswith('postgres'):
-        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres','postgresql')
+    # if os.environ.get('DATABASE_URL').startswith('postgres'):
+    #     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres','postgresql')
 
 class HerokuConfig(ProductionConfig):
     @classmethod
