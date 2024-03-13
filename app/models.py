@@ -7,7 +7,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 class Customer(db.Model):
     __tablename__ = 'customer'
     CustomerId = db.Column(db.Integer,primary_key=True)
-    ProductId = db.Column(db.Integer,db.ForeignKey('product.ProductId'))
+    ProductId = db.Column(db.Integer)
     Name = db.Column(db.String(128))
     Description = db.Column(db.String(5000))
     Status = db.Column(db.String(64))
