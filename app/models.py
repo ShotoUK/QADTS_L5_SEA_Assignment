@@ -44,7 +44,7 @@ class User(UserMixin, db.Model):
     LastName = db.Column(db.String(64))
     Email = db.Column(db.String(255))
     Password = db.Column(db.String(255))
-    Role = db.Column(db.Integer, default=1)
+    Role = db.Column(db.Integer)
     DateCreated = db.Column(db.DateTime , default=datetime.utcnow)
 
     agent = db.relationship('Customer',backref='user',lazy='dynamic')
@@ -93,7 +93,7 @@ class User(UserMixin, db.Model):
         for u in users:
             user = User.query.filter_by(Email=u).first()
             if user is None:
-                user = User(FirstName=users[u][0],LastName=users[u][1],Email=users[u][2],Password=users[u][3])
+                user = User(FirstName=users[u][0],LastName=users[u][1],Email=users[u][2],password=users[u][3])
             db.session.add(user)
         db.session.commit()
                          
