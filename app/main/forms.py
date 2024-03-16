@@ -14,6 +14,10 @@ class NameForm(FlaskForm):
 class CreateUserForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired()])
     password = PasswordField('Password',validators=[DataRequired()])
+    firstname = StringField('First Name')
+    lastname = StringField('Last Name')
+    role = SelectField('Role', choices=[('1','Admin'),('2','User'),('3','Agent')],validators=[DataRequired()])
+
     submit = SubmitField('Submit')
 
 class CreateCustomerForm(FlaskForm):

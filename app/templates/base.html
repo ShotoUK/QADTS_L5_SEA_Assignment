@@ -31,20 +31,36 @@
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                   </li>
                   {% if current_user.can(1) %}
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/customer/create">Create Customer</a>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Customers
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="/customer/create">Create Customer</a></li>
+                      <li><a class="dropdown-item" href="">View Customer</a></li>
+                    </ul>
                   </li>
                   {% endif %}
 
                   {% if current_user.is_administrator() %}
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/user/create">Create User</a>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Users
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="/user/create">Create User</a></li>
+                      <li><a class="dropdown-item" href="/users/">View Users</a></li>
+                    </ul>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/security/roles/">View Roles</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/security/roles/create">Create Roles</a>
+
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Roles & Permissions
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="/security/roles/create">Create Roles</a></li>
+                      <li><a class="dropdown-item" href="/security/roles">View Roles</a></li>
+                    </ul>
                   </li>
 
                   {% endif %}

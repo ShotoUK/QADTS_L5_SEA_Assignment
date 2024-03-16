@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <title>Users</title>
+
+{% endblock head %}
+
+{% block body %}
+
+    <div class="container">
+
+        <h1 class="mt-5 mb-4">Users</h1>
+
+        <div class="row">
+            <div class="col d-flex justify-content-end">
+                <a class="btn btn-primary mb-3" href="/user/create" role="button">Create User</a>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr data-url="user/delete/{{ user.UserId }}">
+                    <td>{{ user.Email }}</td>
+                    <td>{{ user.FirstName }}</td>
+                    <td>{{ user.LastName }}</td>
+                    <td>{{ user.Role }}</td>
+                    <td>
+                        <a class="btn btn-outline-dark" href="/user/edit/{{user.UserId}}" role="button">Edit</a>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this User?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" href="" role="button">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    
+<script>
+    const deleteNoteModal = document.getElementById('deleteNoteModal')
+    deleteNoteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget
+        const url = button.parentElement.getAttribute('data-url')
+        const deleteButton = deleteNoteModal.querySelector('.btn-danger')
+        deleteButton.setAttribute('href', url)
+    })
+</script>
+
+
+
+{% endblock %}

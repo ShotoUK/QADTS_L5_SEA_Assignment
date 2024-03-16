@@ -32,10 +32,11 @@ def customerdetail(id):
 
                 return redirect('/customer/{}'.format(id))
         except:
-            return 'There was an issue saving note to database'
+            return render_template('error.html',message='There was an issue saving note to database')
         
-    customer = db.session.query(Customer, Note).filter_by(CustomerId=id).outerjoin(Note, Customer.CustomerId == Note.CustomerId).order_by(Note.DateCreated.desc()).all()
-    return render_template('customer.html', customer=customer, current_user=current_user, form=form)
+    customer = db.session.query(Customer).filter_by(CustomerId=id).order_by(Customer.DateCreated.desc()).all()
+    customerNotes = Note.query.filter_by(CustomerId=id).order_by(Note.DateCreated.desc()).all()
+    return render_template('customer.html', customer=customer, current_user=current_user, form=form , customerNotes=customerNotes)
   
 @main.route('/user/create', methods=['GET','POST'])
 @login_required
@@ -52,16 +53,60 @@ def create_user():
 
                 # Set email and password
                 newUser.Email = form.email.data
-                # newUser.Password = newUser.password_hash
+                newUser.FirstName = form.firstname.data
+                newUser.LastName = form.lastname.data
+                newUser.Role = form.role.data
 
                 # Add to database
                 db.session.add(newUser)
                 db.session.commit()
             return render_template('usercreated.html')
         except:
-            return 'There was an issue saving user to database'
+            return render_template('error.html',message='There was an issue saving user to database')
     else:
         return render_template('createuser.html',form=form)
+    
+@main.route('/user/edit/<int:id>', methods=['GET','POST'])
+@login_required
+@admin_required
+def edit_user(id):
+    user = User.query.get_or_404(id)
+    form = CreateUserForm()
+    form.email.data = user.Email
+    form.firstname.data = user.FirstName
+    form.lastname.data = user.LastName
+    form.role.data = str(user.Role)
+
+    if request.method == 'POST':
+        try:
+            if form.validate_on_submit():
+                user.Email = request.form['email']
+                user.FirstName = request.form['firstname']
+                user.LastName = request.form['lastname']
+                user.Role = request.form['role']
+                db.session.add(user)
+                db.session.commit()
+            return redirect('/users/')
+        except:
+            return render_template('error.html',message= 'There was an issue saving user to database')
+    else:
+        return render_template('edituser.html', form=form, id=id)
+    
+@main.route('/user/delete/<int:id>', methods=['GET'])
+@login_required
+@admin_required
+def delete_user(id):
+    user = User.query.get_or_404(id)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect('/users/')
+    
+@main.route('/users/', methods=['GET'])
+@login_required
+@admin_required
+def view_users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
     
 @main.route('/customer/create', methods=['GET','POST'])
 @login_required
@@ -87,7 +132,7 @@ def create_customer():
 
             return redirect('/')
         except:
-            return 'There was an issue saving customer to database'
+            return render_template('error.html',message= 'There was an issue saving customer to database')
     else:
         return render_template('createcustomer.html', form=form)
     
@@ -123,7 +168,7 @@ def edit_customer(id):
                 db.session.commit()
             return redirect('/customer/{}'.format(id))
         except:
-            return 'There was an issue saving customer to database'
+            return render_template('error.html',message= 'There was an issue saving customer to database')
     else:
         return render_template('editcustomer.html', form=form, id=id)
     
@@ -176,6 +221,6 @@ def create_roles():
                 db.session.commit()
             return render_template('rolecreated.html')
         except:
-            return 'There was an issue saving role to database'
+            return render_template('error.html',message= 'There was an issue saving role to database')
     else:
         return render_template('createrole.html', form=form ,roles=roles)

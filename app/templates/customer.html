@@ -15,7 +15,7 @@
 
         </div>
         <div class="col d-flex justify-content-end">
-            <a class="btn btn-outline-dark mb-3" href="/customer/edit/{{customer[0][0].CustomerId}}" role="button">Edit</a>
+            <a class="btn btn-outline-dark mb-3" href="/customer/edit/{{customer[0].CustomerId}}" role="button">Edit</a>
             <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
         </div>  
     </div>
@@ -25,7 +25,7 @@
             <p class="fs-5">Customer ID:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].CustomerId }}</p>
+            <p class="fs-5">{{ customer[0].CustomerId }}</p>
         </div>  
     </div>
 
@@ -34,7 +34,7 @@
             <p class="fs-5">Customer Name:</p>
         </div>
         <div class="col-5 align-items-center">
-            <p class="fs-5">{{ customer[0][0].Name }}</p>
+            <p class="fs-5">{{ customer[0].Name }}</p>
         </div>  
     </div>
 
@@ -43,7 +43,7 @@
             <p class="fs-5">Product:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].ProductId }}</p>
+            <p class="fs-5">{{ customer[0].ProductId }}</p>
         </div>  
     </div>
 
@@ -52,7 +52,7 @@
             <p class="fs-5">Customer Status:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].Status }}</p>
+            <p class="fs-5">{{ customer[0].Status }}</p>
         </div>  
     </div>
 
@@ -61,7 +61,7 @@
             <p class="fs-5">Date Created:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].DateCreated }}</p>
+            <p class="fs-5">{{ customer[0].DateCreated }}</p>
         </div>  
     </div>
 
@@ -70,7 +70,7 @@
             <p class="fs-5">Description:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].Description }}</p>
+            <p class="fs-5">{{ customer[0].Description }}</p>
         </div>  
     </div>
 
@@ -79,7 +79,7 @@
             <p class="fs-5">Contact Name:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].ContactName }}</p>
+            <p class="fs-5">{{ customer[0].ContactName }}</p>
         </div>  
     </div>
 
@@ -88,7 +88,7 @@
             <p class="fs-5">Contact Email:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].ContactEmail }}</p>
+            <p class="fs-5">{{ customer[0].ContactEmail }}</p>
         </div>  
     </div>
 
@@ -97,7 +97,7 @@
             <p class="fs-5">Contact Phone:</p>
         </div>
         <div class="col-5">
-            <p class="fs-5">{{ customer[0][0].ContactPhone }}</p>
+            <p class="fs-5">{{ customer[0].ContactPhone }}</p>
         </div>  
     </div>
 
@@ -151,7 +151,7 @@
 <div class="container mt-4">
 
     <div class="row">
-        <form method="POST" action="/customer/{{ customer[0][0].CustomerId }}">
+        <form method="POST" action="/customer/{{ customer[0].CustomerId }}">
             {{ form.hidden_tag() }}
             <div class="form-floating">
                 {{ form.note(class='form-control mb-4 shadow p-3 bg-body rounded border border-secondary', placeholder="Add Note", id='noteInput') }}
@@ -161,12 +161,11 @@
         </form>
     </div>
 
-    {% for result in customer %}
+    {% for result in customerNotes %}
     <div class="card shadow p-3 mb-2 bg-body rounded">
-        <div class="card-body" data-url="note/delete/{{ result[1].NoteId }}">
-            <p class="align-self-start">Date Created: {{ result[1].DateCreated.strftime('%d/%m/%Y') }}</p> 
-            <p>{{ result[1].Note }}</p>
-            <!-- <a href="customer/note/delete/{{ result[1].NoteId }}" class="btn btn-danger">Delete</a> -->
+        <div class="card-body" data-url="note/delete/{{ result.NoteId }}">
+            <p class="align-self-start">Date Created: {{ result.DateCreated.strftime('%d/%m/%Y') }}</p> 
+            <p>{{ result.Note }}</p>
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteNoteModal">Delete</button>
         </div>
     </div>
