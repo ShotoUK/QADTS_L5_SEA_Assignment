@@ -1,6 +1,7 @@
 import unittest
 from app import create_app, db
 from app.models import User
+from datetime import datetime
 
 class UserModelTestCase(unittest.TestCase):
     def setUp(self):
@@ -8,6 +9,14 @@ class UserModelTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
+
+        self.user = User()
+        self.user.Email = 'unittest@email.com'
+        self.user.Password = 'testpassword'
+        self.user.Role = 1
+        self.user.FirstName = 'Test'
+        self.user.LastName = 'User'
+        self.user.DateCreated = datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
     def tearDown(self):
         db.session.remove()

@@ -16,8 +16,6 @@ def index():
     customers = Customer.query.all()
     form = NameForm()
 
-    # send_email('charlton.reid@tigersolv.com','Test Email','mail/test')
-
     return render_template('index.html', form=form, customers=customers)
 
 @main.route('/customer/<int:id>', methods=['GET','POST'])

@@ -132,7 +132,6 @@ class Role(db.Model):
     Name = db.Column(db.String(64))
     Default = db.Column(db.Boolean,default=False,index=True)
     Permissions = db.Column(db.Integer)
-    # Users = db.relationship('User',backref='Role',lazy='dynamic')
 
     def __init__(self,**kwargs):
         super(Role,self).__init__(**kwargs)
@@ -178,25 +177,14 @@ class Permission:
     VIEW = 1
     EDIT = 2
     ADMIN = 4
-    
-# class Product(db.Model):
-#     __tablename__ = 'product'
-#     ProductId = db.Column(db.Integer,primary_key=True)
-#     Name = db.Column(db.String(128))
-#     Description = db.Column(db.String(2000))
-#     Price = db.Column(db.Float)
-#     DateCreated = db.Column(db.DateTime, default=datetime.utcnow)
-
-#     def __repr__(self):
-#         return '<Product {}>'.format(self.name)
-    
+       
 class Note(db.Model):
     __tablename__ = 'note'
     NoteId = db.Column(db.Integer,primary_key=True)
     CustomerId = db.Column(db.Integer,db.ForeignKey('customer.CustomerId'))
     AgentId = db.Column(db.Integer,db.ForeignKey('user.UserId'))
     Note = db.Column(db.String(2000))
-    DateCreated = db.Column(db.DateTime, default=datetime.utcnow)
+    DateCreated = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):
         return '<Note {}>'.format(self.name)

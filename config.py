@@ -8,11 +8,11 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
     MAIL_SERVER = 'us2.smtp.mailhostbox.com'
-    MAIL_PORT = 25
+    MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'charlton@ballincoder.tech'
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or '@^tHMUS#N4'
     FLASKY_MAIL_SUBJECT_PREFIX = '[TigersolvCRM]'
     FLASKY_MAIL_SENDER = 'Tigersolv CRM <charlton@ballincoder.tech>'
 
