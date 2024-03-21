@@ -16,17 +16,17 @@ class CreateUserForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired()])
     firstname = StringField('First Name')
     lastname = StringField('Last Name')
-    role = SelectField('Role', choices=[('1','Admin'),('2','User'),('3','Agent')],validators=[DataRequired()])
+    role = SelectField('Role', choices=[('1','Admin'),('2','User'),('3','Agent')])
 
     submit = SubmitField('Submit')
 
 class CreateCustomerForm(FlaskForm):
-    name = StringField('Name')
-    product = SelectField('Product', choices=[('1','Debtsolv'),('2','Wallkat'),('3','Training'),('4','Migration'),('5','Bespoke')])
+    name = StringField('Name',validators=[DataRequired()])
+    product = SelectField('Product', choices=[('1','Debtsolv'),('2','Wallkat'),('3','Training'),('4','Migration'),('5','Bespoke')],validators=[DataRequired()])
     description = StringField('Description')
-    status = SelectField('Status', choices=[('New Lead','New Lead'),('Active','Active'),('Inactive','Inactive')])
+    status = SelectField('Status', choices=[('New Lead','New Lead'),('Active','Active'),('Inactive','Inactive')],validators=[DataRequired()])
     contactname = StringField('Contact Name')
-    contactemail = StringField('Contact Email')
+    contactemail = StringField('Contact Email',validators=[DataRequired()])
     contactphone = StringField('Contact Phone')
     agent = SelectField('Agent', choices=[('1','Charlton'),('2','Jeff'),('3','Jim'),('4','Barry'),('5','Jess')])
     submit = SubmitField('Submit')

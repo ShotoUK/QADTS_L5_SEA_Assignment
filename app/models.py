@@ -1,5 +1,7 @@
 from . import db
 from . import login_manager
+from flask import current_app
+from itsdangerous import TimedSerializer as Serializer
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
@@ -44,8 +46,9 @@ class User(UserMixin, db.Model):
     LastName = db.Column(db.String(64))
     Email = db.Column(db.String(255))
     Password = db.Column(db.String(255))
-    Role = db.Column(db.Integer)
-    DateCreated = db.Column(db.DateTime , default=datetime.utcnow)
+    Role = db.Column(db.Integer, default=1)
+    DateCreated = db.Column(db.DateTime , default=datetime.now)
+    Confirmed = db.Column(db.Boolean,default=True)
 
     agent = db.relationship('Customer',backref='user',lazy='dynamic')
     note = db.relationship('Note',backref='user',lazy='dynamic')
@@ -84,6 +87,24 @@ class User(UserMixin, db.Model):
     
     def is_administrator(self):
         return self.can(Permission.ADMIN)
+    
+    
+    def generate_confirmation_token(self,expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'],expiration)
+        return s.dumps({'confirm':self.UserId}).decode('utf-8')
+    
+    def confirm(self,token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.UserId:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        db.session.commit()
+        return True
     
     @staticmethod
     def insert_adminuser():
@@ -158,16 +179,16 @@ class Permission:
     EDIT = 2
     ADMIN = 4
     
-class Product(db.Model):
-    __tablename__ = 'product'
-    ProductId = db.Column(db.Integer,primary_key=True)
-    Name = db.Column(db.String(128))
-    Description = db.Column(db.String(2000))
-    Price = db.Column(db.Float)
-    DateCreated = db.Column(db.DateTime, default=datetime.utcnow)
+# class Product(db.Model):
+#     __tablename__ = 'product'
+#     ProductId = db.Column(db.Integer,primary_key=True)
+#     Name = db.Column(db.String(128))
+#     Description = db.Column(db.String(2000))
+#     Price = db.Column(db.Float)
+#     DateCreated = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return '<Product {}>'.format(self.name)
+#     def __repr__(self):
+#         return '<Product {}>'.format(self.name)
     
 class Note(db.Model):
     __tablename__ = 'note'

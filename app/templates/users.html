@@ -30,12 +30,12 @@
             </thead>
             <tbody>
                 {% for user in users %}
-                <tr data-url="user/delete/{{ user.UserId }}">
+                <tr>
                     <td>{{ user.Email }}</td>
                     <td>{{ user.FirstName }}</td>
                     <td>{{ user.LastName }}</td>
                     <td>{{ user.Role }}</td>
-                    <td>
+                    <td data-url="delete/{{ user.UserId }}">
                         <a class="btn btn-outline-dark" href="/user/edit/{{user.UserId}}" role="button">Edit</a>
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                     </td>
@@ -69,7 +69,7 @@
 {% block scripts %}
     
 <script>
-    const deleteNoteModal = document.getElementById('deleteNoteModal')
+    const deleteNoteModal = document.getElementById('deleteModal')
     deleteNoteModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget
         const url = button.parentElement.getAttribute('data-url')

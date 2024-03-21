@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Notes</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">Created At</th>
+                        <th scope="col">Updated At</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for note in notes %}
+                    <tr>
+                        <th scope="row">{{ note.id }}</th>
+                        <td>{{ note.title }}</td>
+                        <td>{{ note.content }}</td>
+                        <td>{{ note.created_at }}</td>
+                        <td>{{ note.updated_at }}</td>
+                        <td>
+                            <a href="/note/{{ note.id }}" class="btn btn-primary">View</a>
+                            <a href="/note/{{ note.id }}/edit" class="btn btn-warning">Edit</a>
+                            <a href="/note/{{ note.id }}/delete" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

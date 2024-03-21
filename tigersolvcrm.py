@@ -1,14 +1,16 @@
 import os
 from app import create_app, db
-from app.models import User, Customer, Product, Note, Role, Permission
+from app.models import User, Customer, Note, Role, Permission
 from flask_migrate import Migrate, upgrade
+from flask_mail import Mail, Message
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+mail = Mail(app)
 migrate = Migrate(app, db)
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Customer=Customer, Product=Product, Note=Note, Role=Role, Permission=Permission)
+    return dict(db=db, User=User, Customer=Customer, Note=Note, Role=Role, Permission=Permission)
 
 @app.cli.command()
 def test():

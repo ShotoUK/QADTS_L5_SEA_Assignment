@@ -6,6 +6,8 @@ from .. import db
 from app.models import User, Customer, Permission, Role, Note
 from . import main
 from app.decorators import permission_required, admin_required
+import logging
+from app.email import send_email
 
 @main.route('/', methods=['GET','POST'])
 @login_required
@@ -13,6 +15,8 @@ from app.decorators import permission_required, admin_required
 def index():
     customers = Customer.query.all()
     form = NameForm()
+
+    # send_email('charlton.reid@tigersolv.com','Test Email','mail/test')
 
     return render_template('index.html', form=form, customers=customers)
 
@@ -32,6 +36,7 @@ def customerdetail(id):
 
                 return redirect('/customer/{}'.format(id))
         except:
+
             return render_template('error.html',message='There was an issue saving note to database')
         
     customer = db.session.query(Customer).filter_by(CustomerId=id).order_by(Customer.DateCreated.desc()).all()
@@ -46,6 +51,8 @@ def create_user():
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
+                logging.info('Creating new user')
+
                 newUser = User()
                 
                 # Generate password hash
@@ -60,16 +67,25 @@ def create_user():
                 # Add to database
                 db.session.add(newUser)
                 db.session.commit()
+
+                logging.info('User created')
+
             return render_template('usercreated.html')
         except:
-            return render_template('error.html',message='There was an issue saving user to database')
+
+            logging.error('Issue saving user to database')
+            return render_template('error.html',message='There was an issue saving user to database')     
     else:
+
+        logging.info('Request is not POST method, Rendering create user form')
         return render_template('createuser.html',form=form)
     
 @main.route('/user/edit/<int:id>', methods=['GET','POST'])
 @login_required
 @admin_required
 def edit_user(id):
+    logging.info('Editing user with id: {}'.format(id))
+
     user = User.query.get_or_404(id)
     form = CreateUserForm()
     form.email.data = user.Email
@@ -80,33 +96,63 @@ def edit_user(id):
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
+                logging.info('Updating user with id: {}'.format(id))
+
                 user.Email = request.form['email']
                 user.FirstName = request.form['firstname']
                 user.LastName = request.form['lastname']
                 user.Role = request.form['role']
                 db.session.add(user)
                 db.session.commit()
+
+                logging.info('User updated')
+
             return redirect('/users/')
         except:
+
+            logging.error('Issue saving update user data to database')
             return render_template('error.html',message= 'There was an issue saving user to database')
     else:
+
+        logging.info('Request is not POST method, Rendering edit user form')
         return render_template('edituser.html', form=form, id=id)
     
-@main.route('/user/delete/<int:id>', methods=['GET'])
+@main.route('/users/delete/<int:id>', methods=['GET'])
 @login_required
 @admin_required
 def delete_user(id):
-    user = User.query.get_or_404(id)
-    db.session.delete(user)
-    db.session.commit()
-    return redirect('/users/')
+    try:
+        logging.info('Deleting user with id: {}'.format(id))
+
+        user = User.query.get_or_404(id)
+        db.session.delete(user)
+        db.session.commit()
+
+        logging.info('User deleted')
+
+        return redirect('/users/')
+    
+    except:
+
+        logging.error('Issue deleting user from database')
+        return render_template('error.html',message= 'There was an issue deleting user from database')
     
 @main.route('/users/', methods=['GET'])
 @login_required
 @admin_required
 def view_users():
-    users = User.query.all()
-    return render_template('users.html', users=users)
+    try:
+        logging.info('Rendering users page')
+
+        users = User.query.all()
+
+        logging.info('Users page rendered')
+        return render_template('users.html', users=users)
+    
+    except:
+
+        logging.error('Issue rendering users page')
+        return render_template('error.html',message= 'There was an issue rendering users page')
     
 @main.route('/customer/create', methods=['GET','POST'])
 @login_required
@@ -118,6 +164,9 @@ def create_customer():
         try:
             
             if form.validate_on_submit():
+
+                logging.info('Creating new customer')
+
                 newCustomer = Customer()
                 newCustomer.Name = form.name.data
                 newCustomer.ProductId = form.product.data
@@ -130,10 +179,17 @@ def create_customer():
                 db.session.add(newCustomer)
                 db.session.commit()
 
+                logging.info('Customer created')
+
             return redirect('/')
+        
         except:
+
+            logging.error('Issue saving customer to database')
             return render_template('error.html',message= 'There was an issue saving customer to database')
     else:
+
+        logging.info('Request is not POST method, Rendering create customer form')
         return render_template('createcustomer.html', form=form)
     
 @main.route('/customer/edit/<int:id>', methods=['GET','POST'])
@@ -154,6 +210,9 @@ def edit_customer(id):
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
+
+                logging.info('Updating customer with id: {}'.format(id))
+
                 customer.Name = request.form['name']
                 customer.ProductId = request.form['product']
                 customer.Description = request.form['description']
@@ -166,28 +225,78 @@ def edit_customer(id):
 
                 db.session.add(customer)
                 db.session.commit()
+
+                logging.info('Customer updated')
+
             return redirect('/customer/{}'.format(id))
+        
         except:
+
+            logging.error('Issue saving customer to database')
             return render_template('error.html',message= 'There was an issue saving customer to database')
     else:
+
+        logging.info('Request is not POST method, Rendering edit customer form')
         return render_template('editcustomer.html', form=form, id=id)
     
 @main.route('/customer/note/delete/<int:id>', methods=['GET'])
 @login_required
 @admin_required
+def view_notes():
+    try:
+        logging.info('Rendering notes page')
+
+        notes = Note.query.all()
+
+        logging.info('Notes page rendered')
+        return render_template('notes.html', notes=notes)
+    
+    except:
+
+        logging.error('Issue rendering notes page')
+        return render_template('error.html',message= 'There was an issue rendering notes page')
+    
+@main.route('/customer/note/delete/<int:id>', methods=['GET'])
+@login_required
+@admin_required
 def delete_note(id):
-    note = Note.query.get_or_404(id)
-    db.session.delete(note)
-    db.session.commit()
-    return redirect('/customer/{}'.format(note.CustomerId))
+
+    try:
+        logging.info('Deleting note with id: {}'.format(id))
+
+        note = Note.query.get_or_404(id)
+        db.session.delete(note)
+        db.session.commit()
+
+        logging.info('Note deleted')
+
+        return redirect('/customer/{}'.format(note.CustomerId))
+    
+    except:
+
+        logging.error('Issue deleting note from database')
+        return render_template('error.html',message= 'There was an issue deleting note from database')
     
 @main.route('/customer/delete/<int:id>', methods=['GET','POST'])
 @login_required
 @admin_required
 def delete_customer(id):
-    customer = Customer.query.get_or_404(id)
-    db.session.delete(customer)
-    db.session.commit()
+
+    try:
+
+        logging.info('Deleting customer with id: {}'.format(id))
+    
+        customer = Customer.query.get_or_404(id)
+        db.session.delete(customer)
+        db.session.commit()
+
+        logging.info('Customer deleted')
+
+    except:
+
+        logging.error('Issue deleting customer from database')
+        return render_template('error.html',message= 'There was an issue deleting customer from database')
+
     return redirect('/')
 
     
@@ -195,9 +304,19 @@ def delete_customer(id):
 @login_required
 @admin_required
 def view_roles():
-    roles = Role.query.all()
 
-    return render_template('roles.html', roles=roles)
+    try:
+
+        logging.info('Rendering roles page')
+        roles = Role.query.all()
+        logging.info('Roles loaded from database')
+
+        return render_template('roles.html', roles=roles)
+    
+    except:
+
+        logging.error('Issue rendering roles page')
+        return render_template('error.html',message= 'There was an issue rendering roles page')
 
 @main.route('/security/roles/create', methods=['GET','POST'])
 @login_required
@@ -208,6 +327,9 @@ def create_roles():
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
+
+                logging.info('Creating new role')
+
                 newRole = Role()
                 newRole.Name = form.name.data
 
@@ -219,8 +341,16 @@ def create_roles():
                 newRole.Permissions = permissionValue             
                 db.session.add(newRole)
                 db.session.commit()
+
+                logging.info('Role created')
+
             return render_template('rolecreated.html')
+        
         except:
+
+            logging.error('Issue saving role to database')
             return render_template('error.html',message= 'There was an issue saving role to database')
     else:
+
+        logging.info('Request is not POST method, Rendering create role form')
         return render_template('createrole.html', form=form ,roles=roles)

@@ -12,14 +12,14 @@
         <h1 class="mt-5 mb-4">Create Customer</h1>
         <form method="POST" action="/customer/create">
             {{ form.hidden_tag() }}
-            {{ form.name.label }} {{ form.name(class='form-control border border-dark mb-2') }}
-            {{ form.status.label }} {{ form.status(class='form-select border border-dark mb-2') }}
-            {{ form.product.label }} {{ form.product(class='form-select border border-dark mb-2') }}
-            {{ form.description.label }} {{ form.description(class='form-control border border-dark mb-2') }}
-            {{ form.contactname.label }} {{ form.contactname(class='form-control border border-dark mb-2') }}
-            {{ form.contactemail.label }} {{ form.contactemail(class='form-control border border-dark mb-2') }}
-            {{ form.contactphone.label }} {{ form.contactphone(class='form-control border border-dark mb-2') }}
-            {{ form.agent.label }} {{ form.agent(class='form-select border border-dark mb-2') }}
+            {{ form.name.label(class='text-muted') }} [Required] {{ form.name(class='form-control border border-dark mb-2') }}
+            {{ form.status.label(class='text-muted') }} [Required] {{ form.status(class='form-select border border-dark mb-2') }}
+            {{ form.product.label(class='text-muted') }} [Required] {{ form.product(class='form-select border border-dark mb-2') }}
+            {{ form.description.label(class='text-muted') }} {{ form.description(class='form-control border border-dark mb-2') }}
+            {{ form.contactname.label(class='text-muted') }} {{ form.contactname(class='form-control border border-dark mb-2') }}
+            {{ form.contactemail.label(class='text-muted') }} [Required] {{ form.contactemail(class='form-control border border-dark mb-2') }}
+            {{ form.contactphone.label(class='text-muted') }} {{ form.contactphone(class='form-control border border-dark mb-2') }}
+            {{ form.agent.label(class='text-muted') }} {{ form.agent(class='form-select border border-dark mb-2') }}
             {{ form.submit(class='btn btn-primary mt-3') }}
         </form>
     </div>
