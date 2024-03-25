@@ -1,10 +1,11 @@
 from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required
-from .forms import LoginForm, RegistrationForm
+from flask_login import login_user, logout_user, login_required, current_user
+from .forms import LoginForm, RegistrationForm, PasswordResetRequestForm, PasswordResetForm
 from ..models import User
 from . import auth
 from .. import db
 import logging
+from ..email import send_email
 
 
 @auth.route('/login/', methods=['GET','POST'])
@@ -80,6 +81,10 @@ def register():
                 db.session.add(newUser)
                 db.session.commit()
 
+                # Send confirmation email
+                token = newUser.generate_confirmation_token()
+                send_email(newUser.Email,'Confirm Your Account','auth/email/confirm',user=newUser,token=token)
+
                 flash('You can now login.')
 
                 logging.info('User Registered.')
@@ -95,4 +100,72 @@ def register():
 
         logging.info('User not registered.')
         return render_template('register.html',form=form)
+    
+@auth.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.Confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm(token):
+        current_user.Confirmed = True
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!')
+    else:
+        flash('The confirmation link is invalid or has expired.')
+    return redirect(url_for('main.index'))
+
+@auth.route('/confirm')
+@login_required
+def resend_confirmation():
+    token = current_user.generate_confirmation_token()
+    send_email(current_user.Email,'Confirm Your Account','auth/email/confirm',user=current_user,token=token)
+    flash('A new confirmation email has been sent to you by email.')
+    return redirect(url_for('main.index'))
+
+@auth.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        
+        if not current_user.Confirmed \
+                and request.blueprint != 'auth' \
+                and request.endpoint != 'static':
+            return redirect(url_for('auth.unconfirmed'))
+        
+@auth.route('/unconfirmed')
+def unconfirmed():
+    if current_user.is_anonymous or current_user.Confirmed:
+        return redirect('main.index')
+    return render_template('auth/unconfirmed.html')
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def password_reset_request():
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    form = PasswordResetRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(Email=form.email.data.lower()).first()
+        if user:
+            token = user.generate_reset_token()
+            send_email(user.Email, 'Reset Your Password',
+                       'auth/email/reset_password',
+                       user=user, token=token)
+        flash('An email with instructions to reset your password has been '
+              'sent to you.')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/resetpasswordrequest.html', form=form)
+
+@auth.route('/reset/<token>', methods=['GET', 'POST'])
+def password_reset(token):
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        if User.reset_password(token, form.password.data):
+            db.session.commit()
+            flash('Your password has been updated.')
+            return redirect(url_for('auth.login'))
+        else:
+            return redirect(url_for('main.index'))
+    return render_template('auth/resetpassword.html', form=form, token=token)
+
         

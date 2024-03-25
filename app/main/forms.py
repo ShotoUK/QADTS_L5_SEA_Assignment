@@ -20,6 +20,15 @@ class CreateUserForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
+class EditUserForm(FlaskForm):
+    email = StringField('Email',validators=[DataRequired()])
+    password = PasswordField('Password')
+    firstname = StringField('First Name')
+    lastname = StringField('Last Name')
+    role = SelectField('Role', choices=[('1','Admin'),('2','User'),('3','Agent')])
+
+    submit = SubmitField('Submit')
+
 class CreateCustomerForm(FlaskForm):
     name = StringField('Name',validators=[DataRequired()])
     product = SelectField('Product', choices=[('1','Debtsolv'),('2','Wallkat'),('3','Training'),('4','Migration'),('5','Bespoke')],validators=[DataRequired()])

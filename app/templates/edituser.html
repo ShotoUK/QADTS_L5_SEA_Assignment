@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>Edit User</title>
+{% endblock %}
+{% block body %}
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-4">Edit User</h1>
+        <form method="POST" action="/user/edit/{{id}}">
+            {{ form.hidden_tag() }}
+            {{ form.email.label(class='text-muted') }} {{ form.email(class='form-control border border-dark mb-2') }}
+            {{ form.firstname.label(class='text-muted') }} {{ form.firstname(class='form-control border border-dark mb-2') }}
+            {{ form.lastname.label(class='text-muted') }} {{ form.lastname(class='form-control border border-dark mb-2') }}
+            {{ form.role.label(class='text-muted') }} {{ form.role(class='form-select border border-dark mb-2') }}
+            {{ form.submit(class='btn btn-primary mt-3') }} 
+        </form>
+        <button class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
+        
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="changePasswordModal" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>Enter new password below</p>
+                <form method="POST" action="/user/changepassword/{{id}}">
+                    {{ form.hidden_tag() }}
+                    {{ form.password.label(class='text-muted') }} {{ form.password(class='form-control border border-dark mb-2') }}
+                    {{ form.submit(class='btn btn-primary mt-3') }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="confirmationModal" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>Enter new password below</p>
+                <form method="POST" action="/user/changepassword/{{id}}">
+                    {{ form.hidden_tag() }}
+                    {{ form.password.label(class='text-muted') }} {{ form.password(class='form-control border border-dark mb-2') }}
+                    {{ form.submit(class='btn btn-primary mt-3 ') }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+</html>

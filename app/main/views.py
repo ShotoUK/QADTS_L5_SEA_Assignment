@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, abort, render_template
 from flask_login import login_required,current_user
 from app.main.forms import NameForm, LoginForm, CreateUserForm, CreateCustomerForm \
-    , CreateRoleForm, CreateNoteForm
+    , CreateRoleForm, CreateNoteForm, EditUserForm
 from .. import db
 from app.models import User, Customer, Permission, Role, Note
 from . import main
@@ -85,11 +85,12 @@ def edit_user(id):
     logging.info('Editing user with id: {}'.format(id))
 
     user = User.query.get_or_404(id)
-    form = CreateUserForm()
+    form = EditUserForm()
     form.email.data = user.Email
     form.firstname.data = user.FirstName
     form.lastname.data = user.LastName
     form.role.data = str(user.Role)
+    form.password.label.text = 'New Password'
 
     if request.method == 'POST':
         try:
@@ -114,6 +115,27 @@ def edit_user(id):
 
         logging.info('Request is not POST method, Rendering edit user form')
         return render_template('edituser.html', form=form, id=id)
+    
+@main.route('/user/changepassword/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def change_user_password(id):
+    try:
+        logging.info('Changing user password with id: {}'.format(id))
+
+        user = User.query.get_or_404(id)
+        user.password = request.form['password']
+        db.session.add(user)
+        db.session.commit()
+
+        logging.info('User passwor changed')
+
+        return redirect('/users/')
+    
+    except:
+
+        logging.error('Issue changing user password in database')
+        return render_template('error.html',message= 'There was an issue changing user password in the database')
     
 @main.route('/users/delete/<int:id>', methods=['GET'])
 @login_required

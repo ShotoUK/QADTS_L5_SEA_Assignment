@@ -1,8 +1,8 @@
 from . import db
 from . import login_manager
 from flask import current_app
-from itsdangerous import TimedSerializer as Serializer
-from datetime import datetime
+from jwt import encode, decode
+from datetime import datetime, timezone, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 
@@ -89,21 +89,54 @@ class User(UserMixin, db.Model):
         return self.can(Permission.ADMIN)
     
     
-    def generate_confirmation_token(self,expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'],expiration)
-        return s.dumps({'confirm':self.UserId}).decode('utf-8')
+    def generate_confirmation_token(self, expiration=3600):
+        token = encode({"confirm": self.UserId, "exp": datetime.now(tz=timezone.utc) + timedelta(seconds=expiration) },current_app.config['SECRET_KEY'], algorithm='HS256')
+        return token
     
     def confirm(self,token):
-        s = Serializer(current_app.config['SECRET_KEY'])
         try:
-            data = s.loads(token)
+            data = decode(
+                token,
+                current_app.config['SECRET_KEY'],
+                leeway=timedelta(seconds=10),
+                algorithms=['HS256']
+            )
         except:
             return False
         if data.get('confirm') != self.UserId:
             return False
         self.confirmed = True
         db.session.add(self)
-        db.session.commit()
+        # db.session.commit()
+        return True
+    
+    def generate_reset_token(self,expiration=3600):
+        token = encode(
+            {
+            "reset": self.UserId, 
+             "exp": datetime.now(tz=timezone.utc) + timedelta(seconds=expiration) 
+             },
+             current_app.config['SECRET_KEY'], 
+             algorithm='HS256'         
+                       )
+        return token
+    
+    @staticmethod
+    def reset_password(token,new_password):
+        try:
+            data = decode(
+                token,
+                current_app.config['SECRET_KEY'],
+                leeway=timedelta(seconds=10),
+                algorithms=['HS256']
+            )
+        except:
+            return False
+        user = User.query.get(data.get('reset'))
+        if user is None:
+            return False
+        user.password = new_password
+        db.session.add(user)
         return True
     
     @staticmethod

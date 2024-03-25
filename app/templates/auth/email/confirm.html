@@ -1,0 +1,13 @@
+<!-- FILEPATH: /c:/Users/icema/OneDrive/Documents/Python Projects/DTSL5_SEA_Project/QADTS_L5_SEA_Assignment/app/templates/auth/email/confirm.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to the Tigersolv CRM!</title>
+</head>
+<body>
+    <h1>Welcome to the Tigersolv CRM!</h1>
+    <p>To confirm your account please click on the following link: <a href="{{ url_for('auth.confirm', token=token,_external=True) }}">Confirm Account</a></p>
+    <p>Kind Regards,</p>
+    <p>Tigersolv Support Team</p>
+</body>
+</html>
