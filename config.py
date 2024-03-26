@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'sdkfbsdkbfgdskjfbg'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir,'data.sqlite')
     SQLALCHEMY_BINDS = {'default':'sqlite:///' + os.path.join(basedir,'data.sqlite')}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -13,8 +13,8 @@ class Config:
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Tigersolv]'
-    FLASKY_MAIL_SENDER = 'Tigersolv CRM <charlton@ballincoder.tech>'
+    CRM_MAIL_SUBJECT_PREFIX = os.environ.get('CRM_MAIL_SUBJECT_PREFIX')
+    CRM_MAIL_SENDER = os.environ.get('CRM_MAIL_SENDER')
 
     @staticmethod
     def init_app(app):

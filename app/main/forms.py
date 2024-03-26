@@ -7,10 +7,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-class NameForm(FlaskForm):
-    name = StringField('What is your name?',validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
 class CreateUserForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired()])
     password = PasswordField('Password',validators=[DataRequired()])
@@ -42,7 +38,7 @@ class CreateCustomerForm(FlaskForm):
 
 class CreateRoleForm(FlaskForm):
     name = StringField('Name')
-    permissions = SelectMultipleField('Permissions', choices=[('1','View'),('2','Edit'),('4','Admin')])
+    permissions = SelectMultipleField('Permissions', choices=[('1','View'),('2','Create'),('4','Edit'),('8','Delete'),('16','Admin')],validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class CreateNoteForm(FlaskForm):

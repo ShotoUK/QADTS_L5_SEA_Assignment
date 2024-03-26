@@ -208,8 +208,10 @@ class Role(db.Model):
     
 class Permission:
     VIEW = 1
-    EDIT = 2
-    ADMIN = 4
+    CREATE = 2
+    EDIT = 4
+    DELETE = 8
+    ADMIN = 16
        
 class Note(db.Model):
     __tablename__ = 'note'

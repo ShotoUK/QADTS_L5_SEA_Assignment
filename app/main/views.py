@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, abort, render_template
 from flask_login import login_required,current_user
-from app.main.forms import NameForm, LoginForm, CreateUserForm, CreateCustomerForm \
+from app.main.forms import LoginForm, CreateUserForm, CreateCustomerForm \
     , CreateRoleForm, CreateNoteForm, EditUserForm
 from .. import db
 from app.models import User, Customer, Permission, Role, Note
@@ -13,27 +13,40 @@ from app.email import send_email
 @login_required
 @permission_required(Permission.VIEW)
 def index():
-    customers = Customer.query.all()
-    form = NameForm()
+    logging.info('Rendering index page')
 
-    return render_template('index.html', form=form, customers=customers)
+    # get all customers from the database, and pass them to the template
+    customers = Customer.query.all()
+
+    logging.info('Index page rendered')
+
+    return render_template('index.html', customers=customers)
 
 @main.route('/customer/<int:id>', methods=['GET','POST'])
 @login_required
 @permission_required(Permission.VIEW)
 def customerdetail(id):
+    # get the customer from the database using the id, and pass it to the template
+    # if form submitted, save the note to the database
     form = CreateNoteForm()
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
+
+                logging.info('Creating new note for customer with id: {}'.format(id))
+
                 newNote = Note()
                 newNote.CustomerId = id
                 newNote.Note = form.note.data
                 db.session.add(newNote)
                 db.session.commit()
 
+                logging.info('Note created')
+
                 return redirect('/customer/{}'.format(id))
         except:
+
+            logging.error('Issue saving note to database')
 
             return render_template('error.html',message='There was an issue saving note to database')
         
