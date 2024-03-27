@@ -94,10 +94,11 @@ def register():
 
             return redirect(url_for('main.index'))
         
-        except:
+        except Exception as e:
             print(form.errors)
 
-            logging.error('User not registered.')
+            logging.error('User not registered. Exception:{}'.format(e))
+            logging.error(traceback.format_exc())
             return '<h1>There was an issue when creating the user<h1>'
     else:
 
