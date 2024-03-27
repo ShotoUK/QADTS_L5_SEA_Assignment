@@ -35,6 +35,8 @@ class ProductionConfig(Config):
     else:
         SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
 class HerokuConfig(ProductionConfig):
     @classmethod
     def init_app(cls,app):
