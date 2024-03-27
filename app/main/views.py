@@ -36,6 +36,7 @@ def customerdetail(id):
                 logging.info('Creating new note for customer with id: {}'.format(id))
 
                 newNote = Note()
+                newNote.AgentId = current_user.UserId
                 newNote.CustomerId = id
                 newNote.Note = form.note.data
                 db.session.add(newNote)
@@ -56,9 +57,13 @@ def customerdetail(id):
   
 @main.route('/user/create', methods=['GET','POST'])
 @login_required
-@admin_required
+@permission_required(Permission.CREATE)
 def create_user():
     form = CreateUserForm()
+
+    # Get all roles from the database and pass them to the template
+    form.role.choices = [(str(role.RoleId), role.Name) for role in Role.query.all()]
+
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
@@ -93,7 +98,7 @@ def create_user():
     
 @main.route('/user/edit/<int:id>', methods=['GET','POST'])
 @login_required
-@admin_required
+@permission_required(Permission.EDIT)
 def edit_user(id):
     logging.info('Editing user with id: {}'.format(id))
 
@@ -104,6 +109,8 @@ def edit_user(id):
     form.lastname.data = user.LastName
     form.role.data = str(user.Role)
     form.password.label.text = 'New Password'
+    form.password.data = user.Password
+    form.role.choices = [(str(role.RoleId), role.Name) for role in Role.query.all()]
 
     if request.method == 'POST':
         try:
@@ -172,7 +179,7 @@ def delete_user(id):
     
 @main.route('/users/', methods=['GET'])
 @login_required
-@admin_required
+@permission_required(Permission.VIEW)
 def view_users():
     try:
         logging.info('Rendering users page')
@@ -189,10 +196,12 @@ def view_users():
     
 @main.route('/customer/create', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.CREATE)
 def create_customer():
     form = CreateCustomerForm()
 
+    # Get all users from the database and pass them to the template
+    form.agent.choices = [(str(user.UserId), str(user.FirstName) + ' ' + str(user.LastName)) for user in User.query.all()]
     if request.method == 'POST':
         try:
             
@@ -227,7 +236,7 @@ def create_customer():
     
 @main.route('/customer/edit/<int:id>', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.EDIT)
 def edit_customer(id):
     customer = Customer.query.get_or_404(id)
     form = CreateCustomerForm()
@@ -238,7 +247,11 @@ def edit_customer(id):
     form.contactname.data = customer.ContactName
     form.contactemail.data = customer.ContactEmail
     form.contactphone.data = customer.ContactPhone
-    form.agent.data = str(customer.AgentId)
+    form.agent.data = customer.AgentId
+
+    # Get all users from the database and pass them to the template
+    form.agent.choices = [(str(user.UserId), str(user.FirstName) + ' ' + str(user.LastName)) for user in User.query.all()]
+
 
     if request.method == 'POST':
         try:
@@ -260,6 +273,10 @@ def edit_customer(id):
                 db.session.commit()
 
                 logging.info('Customer updated')
+            else:
+                logging.error('Issue saving customer to database')
+                logging.error(form.errors)
+                return render_template('error.html',message= 'There was an issue saving customer to database')
 
             return redirect('/customer/{}'.format(id))
         
@@ -272,9 +289,9 @@ def edit_customer(id):
         logging.info('Request is not POST method, Rendering edit customer form')
         return render_template('editcustomer.html', form=form, id=id)
     
-@main.route('/customer/note/delete/<int:id>', methods=['GET'])
+@main.route('/customer/notes', methods=['GET'])
 @login_required
-@admin_required
+@permission_required(Permission.VIEW)
 def view_notes():
     try:
         logging.info('Rendering notes page')
@@ -335,7 +352,7 @@ def delete_customer(id):
     
 @main.route('/security/roles/', methods=['GET'])
 @login_required
-@admin_required
+@permission_required(Permission.VIEW)
 def view_roles():
 
     try:
@@ -353,7 +370,7 @@ def view_roles():
 
 @main.route('/security/roles/create', methods=['GET','POST'])
 @login_required
-@admin_required
+@permission_required(Permission.CREATE)
 def create_roles():
     form = CreateRoleForm()
     roles = Role.query.all()

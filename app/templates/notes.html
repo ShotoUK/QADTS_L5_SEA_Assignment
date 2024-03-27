@@ -10,25 +10,23 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Content</th>
-                        <th scope="col">Created At</th>
-                        <th scope="col">Updated At</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Agent Id</th>
+                        <th scope="col">Note</th>
+                        <th scope="col">Date Created</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for note in notes %}
                     <tr>
-                        <th scope="row">{{ note.id }}</th>
-                        <td>{{ note.title }}</td>
-                        <td>{{ note.content }}</td>
-                        <td>{{ note.created_at }}</td>
-                        <td>{{ note.updated_at }}</td>
+                        <th scope="row">{{ note.NoteId }}</th>
+                        <td>{{ note.customer.Name }}</td>
+                        <td>{{ note.AgentId }}</td>
+                        <td>{{ note.Note }}</td>
+                        <td>{{ note.DateCreated.strftime('%d/%m/%Y') }}</td>
                         <td>
-                            <a href="/note/{{ note.id }}" class="btn btn-primary">View</a>
-                            <a href="/note/{{ note.id }}/edit" class="btn btn-warning">Edit</a>
-                            <a href="/note/{{ note.id }}/delete" class="btn btn-danger">Delete</a>
+                            <a href="/customer/note/delete/{{ note.NoteId }}" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}

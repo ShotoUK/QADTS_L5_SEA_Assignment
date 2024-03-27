@@ -30,25 +30,36 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                   </li>
-                  {% if current_user.can(1) %}
+                  {% if current_user.can(1) %} <!-- Has view permission -->
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Customers
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      {% if current_user.can(2) %} <!-- Has create permission -->
                       <li><a class="dropdown-item" href="/customer/create">Create Customer</a></li>
+                      {% endif %}
+
+                      {% if current_user.can(1) %} <!-- Has view permission -->
+                      <li><a class="dropdown-item" href="/customer/notes">View All Customer Notes</a></li>
+                      {% endif %}
                     </ul>
                   </li>
                   {% endif %}
 
-                  {% if current_user.is_administrator() %}
+                  
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Users
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="/user/create">Create User</a></li>
+                      {% if current_user.can(2) %}
+                        <li><a class="dropdown-item" href="/user/create">Create User</a></li>
+                      {% endif %}
+
+                      {% if current_user.can(1) %} <!-- Has view permission -->
                       <li><a class="dropdown-item" href="/users/">View Users</a></li>
+                      {% endif %}
                     </ul>
                   </li>
 
@@ -57,12 +68,16 @@
                       Roles & Permissions
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      {% if current_user.can(2) %}
                       <li><a class="dropdown-item" href="/security/roles/create">Create Roles</a></li>
+                      {% endif %}
+                      {% if current_user.can(1) %} <!-- Has view permission -->
                       <li><a class="dropdown-item" href="/security/roles">View Roles</a></li>
+                      {% endif %}
                     </ul>
                   </li>
 
-                  {% endif %}
+                  
                   <li class="nav-item">
                     <a class="nav-link " href="/auth/logout">Logout</a>
                   </li>

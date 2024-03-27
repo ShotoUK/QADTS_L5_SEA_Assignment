@@ -48,7 +48,8 @@ class User(UserMixin, db.Model):
     Password = db.Column(db.String(255))
     Role = db.Column(db.Integer, default=1)
     DateCreated = db.Column(db.DateTime , default=datetime.now)
-    Confirmed = db.Column(db.Boolean,default=True)
+    Confirmed = db.Column(db.Boolean,default=False)
+
 
     agent = db.relationship('Customer',backref='user',lazy='dynamic')
     note = db.relationship('Note',backref='user',lazy='dynamic')
@@ -191,8 +192,8 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': [Permission.VIEW,Permission.EDIT],
-            'Admin': [Permission.VIEW,Permission.EDIT,Permission.ADMIN]
+            'User': [Permission.VIEW,Permission.EDIT ,Permission.CREATE],
+            'Admin': [Permission.VIEW,Permission.EDIT,Permission.CREATE, Permission.DELETE ,Permission.ADMIN]
         }
         default_role = 'User'
         for r in roles:

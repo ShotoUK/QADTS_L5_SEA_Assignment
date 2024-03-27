@@ -12,7 +12,7 @@ class CreateUserForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired()])
     firstname = StringField('First Name')
     lastname = StringField('Last Name')
-    role = SelectField('Role', choices=[('1','Admin'),('2','User'),('3','Agent')])
+    role = SelectField('Role', validate_choice=False, coerce=int)
 
     submit = SubmitField('Submit')
 
@@ -21,7 +21,7 @@ class EditUserForm(FlaskForm):
     password = PasswordField('Password')
     firstname = StringField('First Name')
     lastname = StringField('Last Name')
-    role = SelectField('Role', choices=[('1','Admin'),('2','User'),('3','Agent')])
+    role = SelectField('Role', validate_choice=False, coerce=int)
 
     submit = SubmitField('Submit')
 
@@ -33,7 +33,7 @@ class CreateCustomerForm(FlaskForm):
     contactname = StringField('Contact Name')
     contactemail = StringField('Contact Email',validators=[DataRequired()])
     contactphone = StringField('Contact Phone')
-    agent = SelectField('Agent', choices=[('1','Charlton'),('2','Jeff'),('3','Jim'),('4','Barry'),('5','Jess')])
+    agent = SelectField('Agent', validate_choice=False, coerce=int)
     submit = SubmitField('Submit')
 
 class CreateRoleForm(FlaskForm):
