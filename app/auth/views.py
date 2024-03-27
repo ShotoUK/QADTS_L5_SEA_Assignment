@@ -77,7 +77,7 @@ def register():
                 # Set email and password
                 newUser.Email = form.email.data
                 newUser.Role = 1
-                newUser.Confirmed = True
+                newUser.Confirmed = False
 
                 # Add to database
                 db.session.add(newUser)
