@@ -2,7 +2,7 @@
 
 This application was created as an assignment for DTS L5 Software Engineering & Agile Module.
 
-#Technology Used
+# Technology Used
 
 ## Language
 - Python
