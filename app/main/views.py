@@ -11,7 +11,7 @@ from app.email import send_email
 
 @main.route('/', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.USER)
 def index():
     logging.info('Rendering index page')
 
@@ -24,7 +24,7 @@ def index():
 
 @main.route('/customer/<int:id>', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.USER)
 def customerdetail(id):
     # get the customer from the database using the id, and pass it to the template
     # if form submitted, save the note to the database
@@ -57,7 +57,7 @@ def customerdetail(id):
   
 @main.route('/user/create', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.CREATE)
+@permission_required(Permission.USER)
 def create_user():
     form = CreateUserForm()
 
@@ -98,7 +98,7 @@ def create_user():
     
 @main.route('/user/edit/<int:id>', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.EDIT)
+@permission_required(Permission.USER)
 def edit_user(id):
     logging.info('Editing user with id: {}'.format(id))
 
@@ -179,7 +179,7 @@ def delete_user(id):
     
 @main.route('/users/', methods=['GET'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.USER)
 def view_users():
     try:
         logging.info('Rendering users page')
@@ -196,7 +196,7 @@ def view_users():
     
 @main.route('/customer/create', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.CREATE)
+@permission_required(Permission.USER)
 def create_customer():
     form = CreateCustomerForm()
 
@@ -236,7 +236,7 @@ def create_customer():
     
 @main.route('/customer/edit/<int:id>', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.EDIT)
+@permission_required(Permission.USER)
 def edit_customer(id):
     customer = Customer.query.get_or_404(id)
     form = CreateCustomerForm()
@@ -291,7 +291,7 @@ def edit_customer(id):
     
 @main.route('/customer/notes', methods=['GET'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.USER)
 def view_notes():
     try:
         logging.info('Rendering notes page')
@@ -352,7 +352,7 @@ def delete_customer(id):
     
 @main.route('/security/roles/', methods=['GET'])
 @login_required
-@permission_required(Permission.VIEW)
+@permission_required(Permission.USER)
 def view_roles():
 
     try:
@@ -370,7 +370,7 @@ def view_roles():
 
 @main.route('/security/roles/create', methods=['GET','POST'])
 @login_required
-@permission_required(Permission.CREATE)
+@permission_required(Permission.USER)
 def create_roles():
     form = CreateRoleForm()
     roles = Role.query.all()

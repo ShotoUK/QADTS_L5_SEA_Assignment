@@ -75,7 +75,7 @@ def register():
                 # Set email and password
                 newUser.Email = form.email.data
                 newUser.Role = 1
-                newUser.Confirmed = False
+                newUser.Confirmed = True
 
                 # Add to database
                 db.session.add(newUser)
@@ -83,7 +83,8 @@ def register():
 
                 # Send confirmation email
                 token = newUser.generate_confirmation_token()
-                # send_email(newUser.Email,'Confirm Your Account','auth/email/confirm',user=newUser,token=token)
+                
+                send_email(newUser.Email,'Confirm Your Account','auth/email/confirm',user=newUser,token=token)
 
                 flash('You can now login.')
 

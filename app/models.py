@@ -1,3 +1,4 @@
+import logging
 from . import db
 from . import login_manager
 from flask import current_app
@@ -91,7 +92,9 @@ class User(UserMixin, db.Model):
     
     
     def generate_confirmation_token(self, expiration=3600):
+        logging.info('Generating confirmation token.')
         token = encode({"confirm": self.UserId, "exp": datetime.now(tz=timezone.utc) + timedelta(seconds=expiration) },current_app.config['SECRET_KEY'], algorithm='HS256')
+        logging.info('Token generated.')
         return token
     
     def confirm(self,token):
@@ -192,8 +195,8 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': [Permission.VIEW,Permission.EDIT ,Permission.CREATE],
-            'Admin': [Permission.VIEW,Permission.EDIT,Permission.CREATE, Permission.DELETE ,Permission.ADMIN]
+            'User': [Permission.USER,Permission.USER ,Permission.USER],
+            'Admin': [Permission.USER,Permission.USER,Permission.USER, Permission.DELETE ,Permission.ADMIN]
         }
         default_role = 'User'
         for r in roles:
@@ -208,11 +211,9 @@ class Role(db.Model):
         db.session.commit()
     
 class Permission:
-    VIEW = 1
-    CREATE = 2
-    EDIT = 4
-    DELETE = 8
-    ADMIN = 16
+    USER = 1
+    ADMIN = 2
+
        
 class Note(db.Model):
     __tablename__ = 'note'
