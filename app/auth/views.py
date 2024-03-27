@@ -6,6 +6,7 @@ from . import auth
 from .. import db
 import logging
 from ..email import send_email
+import traceback
 
 
 @auth.route('/login/', methods=['GET','POST'])
@@ -53,9 +54,10 @@ def logout():
 
         return redirect(url_for('main.index'))
     
-    except:
+    except Exception as e:
             
-        logging.error('User log out failed.')
+        logging.error('User log out failed. Exception:{}'.format(e))
+        logging.error(traceback.format_exc())
         return '<h1>There was an issue logging out the user<h1>'
 
 @auth.route('/register/', methods=['GET','POST'])
