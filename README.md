@@ -46,4 +46,7 @@ This application was created as an assignment for DTS L5 Software Engineering & 
 - PostgresQL (Production Environment)
 ## Host
 - Heroku
-- 
+
+# How to use it
+
+Once logged in, you get a view of the current set of customer, from there you can view customer details and notes by clicking the "Detail" button or Edit the custome information using the "Edit" button.
