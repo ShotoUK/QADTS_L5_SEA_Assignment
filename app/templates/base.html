@@ -36,7 +36,7 @@
                       Customers
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% if current_user.can(2) %} <!-- Has create permission -->
+                      {% if current_user.can(1) %} <!-- Has create permission -->
                       <li><a class="dropdown-item" href="/customer/create">Create Customer</a></li>
                       {% endif %}
 
@@ -53,7 +53,7 @@
                       Users
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% if current_user.can(2) %}
+                      {% if current_user.can(1) %}
                         <li><a class="dropdown-item" href="/user/create">Create User</a></li>
                       {% endif %}
 
@@ -68,7 +68,7 @@
                       Roles & Permissions
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% if current_user.can(2) %}
+                      {% if current_user.can(1) %}
                       <li><a class="dropdown-item" href="/security/roles/create">Create Roles</a></li>
                       {% endif %}
                       {% if current_user.can(1) %} <!-- Has view permission -->

@@ -40,7 +40,7 @@ Tigersolv Sales CRM
                     <td>
                         <a class="btn btn-outline-dark" href="/customer/{{customer.CustomerId}}">Detail</a>
 
-                        {% if current_user.can(4) %} <!-- Has Edit Permission -->
+                        {% if current_user.can(1) %} <!-- Has Edit Permission -->
                             <a class="btn btn-warning" href="/customer/edit/{{customer.CustomerId}}">Edit</a>
                         {% endif %}
                     </td>
